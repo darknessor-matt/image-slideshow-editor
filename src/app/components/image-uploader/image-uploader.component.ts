@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, TemplateRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 
 import { FileUploadControl, FileUploadValidators } from '@iplab/ngx-file-upload';
 
@@ -6,7 +6,7 @@ import Cropper from 'cropperjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import { DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-image-uploader',
@@ -30,15 +30,17 @@ export class ImageUploaderComponent implements OnInit, AfterViewInit, OnDestroy 
 
   modalRef?: BsModalRef;
 
+  @Input()
+  index: number
+
+  @Output()
+  outputImage = new EventEmitter<{image:string, index:number}>()
+
   croppedImage: string
 
   constructor(private modalService: BsModalService, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
-    this.modalService.onHidden.subscribe(() => {
-      this.cropper.destroy();
-      this.cropper = null;
-    })
     this.subscription = this.control.valueChanges.subscribe((values: Array<File>) => this.getImage(values[0]));
   }
 
@@ -58,16 +60,14 @@ export class ImageUploaderComponent implements OnInit, AfterViewInit, OnDestroy 
       const fr = new FileReader();
       fr.onload = (e) => {
         this.uploadedFile.next(e.target.result as string)
-        this.modalRef = this.modalService.show(this.modal, {class: 'modal-lg'});
+        this.modalRef = this.modalService.show(this.modal, { class: 'modal-lg' });
         setTimeout(() => {
-
           const image = document.getElementById('image') as HTMLImageElement;
-          console.log(image)
           this.cropper = new Cropper(image, {
             aspectRatio: 16 / 9,
             viewMode: 2,
             preview: '.preview',
-            crop(event) {},
+            crop(event) { },
           });
         }, 0);
       };
@@ -81,10 +81,18 @@ export class ImageUploaderComponent implements OnInit, AfterViewInit, OnDestroy 
   saveImage() {
     const canvas = this.cropper.getCroppedCanvas()
     var that = this
-    canvas.toBlob(function(blob) {
-      const url = URL.createObjectURL(blob);
-      const safeUrl = that.sanitizer.bypassSecurityTrustUrl(url)
-      that.croppedImage = safeUrl as string;
+    canvas.toBlob(function (blob) {
+      setTimeout(() => {
+        const url = URL.createObjectURL(blob);
+        const safeUrl = that.sanitizer.bypassSecurityTrustUrl(url)
+        that.croppedImage = safeUrl as string;
+        that.outputImage.emit({image: that.croppedImage, index: that.index})
+        setTimeout(() => {
+          that.modalRef.hide()
+          that.cropper.destroy();
+          that.cropper = null;
+        }, 100);
+      }, 0);
     });
   }
 
