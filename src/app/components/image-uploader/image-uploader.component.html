@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="d-flex align-items-center g-1">
+        <div class="col-md-4">
+            <file-upload [control]="control"></file-upload>
+        </div>
+        <div class="col-md-8">
+            <img class="img-fluid" *ngIf="croppedImage" [src]="croppedImage" alt="">
+        </div>
+    </div>
+</div>
+
+<ng-template #imageModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Modal</h4>
+        <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+            <span aria-hidden="true" class="visually-hidden">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" style="overflow: auto;">
+        <div class="text-center">
+            <img class="img-fluid" *ngIf="control.valid" id="image" [src]="uploadedFile | async">
+            <div hidden class="preview"></div>
+        </div> <br>
+        <button type="button" class="btn btn-primary" (click)="saveImage()">Save</button>
+    </div>
+</ng-template>
