@@ -24,7 +24,8 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              { "glob": "**/*", "input": "node_modules/tinymce", "output": "/tinymce/" }
             ],
             "styles": [
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
@@ -33,7 +34,8 @@
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.js",
-              "./node_modules/bootstrap/dist/js/bootstrap.js"
+              "./node_modules/bootstrap/dist/js/bootstrap.js",
+              "./node_modules/tinymce/tinymce.min.js"
             ]
           },
           "configurations": {

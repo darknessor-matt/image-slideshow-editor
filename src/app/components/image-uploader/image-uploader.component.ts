@@ -30,11 +30,13 @@ export class ImageUploaderComponent implements OnInit, AfterViewInit, OnDestroy 
 
   modalRef?: BsModalRef;
 
+  tinymceField: any = "Image title"
+
   @Input()
   index: number
 
   @Output()
-  outputImage = new EventEmitter<{image:string, index:number}>()
+  outputImage = new EventEmitter<{ image: string, index: number, title: string }>()
 
   croppedImage: string
 
@@ -86,7 +88,7 @@ export class ImageUploaderComponent implements OnInit, AfterViewInit, OnDestroy 
         const url = URL.createObjectURL(blob);
         const safeUrl = that.sanitizer.bypassSecurityTrustUrl(url)
         that.croppedImage = safeUrl as string;
-        that.outputImage.emit({image: that.croppedImage, index: that.index})
+        that.outputImage.emit({ image: that.croppedImage, index: that.index, title: that.tinymceField })
         setTimeout(() => {
           that.modalRef.hide()
           that.cropper.destroy();

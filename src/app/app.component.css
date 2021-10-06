@@ -1,8 +1,25 @@
 .slideshow-image {
-    width: 100%;
-    height: auto;
     position: absolute;
     left: 50%;
     top: 0px;
+    width: 100%;
+    height: auto;
+    transform: translateX(-50%);
+}
+.slideshow-title {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    color: white;
+}
+
+.slideshow-black-box {
+    position: absolute;
+    left: 50%;
+    width: 100%;
+    bottom: 0;
+    background-color: black;
+    opacity: 50%;
     transform: translateX(-50%);
 }

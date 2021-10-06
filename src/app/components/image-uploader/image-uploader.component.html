@@ -12,7 +12,7 @@
 
 <ng-template #imageModal>
     <div class="modal-header">
-        <h4 class="modal-title pull-left">Modal</h4>
+        <h4 class="modal-title pull-left">Crop image and set title</h4>
         <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
             <span aria-hidden="true" class="visually-hidden">&times;</span>
         </button>
@@ -21,6 +21,11 @@
         <div class="text-center">
             <img class="img-fluid" *ngIf="control.valid" id="image" [src]="uploadedFile | async">
             <div hidden class="preview"></div>
+            <hr>
+            <editor [init]="{ base_url: '/tinymce', suffix: '.min' }" [(ngModel)]="tinymceField" outputFormat="html"
+                initialValue="Image title">
+            </editor>
+
         </div> <br>
         <button type="button" class="btn btn-primary" (click)="saveImage()">Save</button>
     </div>

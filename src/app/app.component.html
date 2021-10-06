@@ -6,16 +6,25 @@
       <div *ngFor="let image of imageIndexes; index as i">
         <div class="row">
           <div class="d-flex align-items-center">
-            <div class="col-md-9">
+            <div class="col-md-8">
               <app-image-uploader (outputImage)="addImageToArray($event)" [index]=i></app-image-uploader>
             </div>
             <div class="col-md-1">
               <label for="lifetime">Lifetime</label>
               <input type="range" class="custom-range" min="1000" max="5000" [(ngModel)]="lifetime[i]" id="lifetime">
+              <label for="animation">Animation</label>
+              <select class="form-select" id="animation" [(ngModel)]="animationsSelected[i]">
+                <option selected value="left">Left</option>
+                <option value="right">Right</option>
+                <option value="top">Top</option>
+                <option value="bottom">Bottom</option>
+                <option value="no-animation">No animation</option>
+              </select>
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <button (click)="removeImage(i)" type="button" class="btn btn-outline-danger">
+
+              <button (click)="removeImage(i)" type="button" class="btn btn-outline-danger h-100">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
                   viewBox="0 0 16 16">
                   <path
@@ -27,9 +36,33 @@
                 </svg>
                 Remove
               </button>
+
+            </div>
+            <div class="col-md-1">
+              <div *ngIf="i!=0">
+                <button (click)="moveUp(i)" type="button" class="btn btn-success">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-arrow-up-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                      d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z">
+                    </path>
+                  </svg>
+                </button>
+              </div>
+              <div *ngIf="i!=numberOfImages-1">
+                <button type="button" (click)="moveDown(i)" class="btn btn-success">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-arrow-down-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                      d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z">
+                    </path>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>
+        <hr>
       </div>
       <br>
       <div class="btn-toolbar">
@@ -44,15 +77,22 @@
 
 <ng-template #slideshowModal>
   <div class="modal-header">
-    <h4 class="modal-title pull-left">Modal</h4>
+    <h4 class="modal-title pull-left">Slideshow</h4>
     <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
-  <div class="modal-body" id="modalBody" [style.height.%]="100" [style.height.px]="1000">
-    <div class="text-center">
-      <div *ngFor="let image of images; index as i" style="position: relative;">
-        <img class="slideshow-image" [style.visibility]="visibility[i]? 'visible': 'hidden'" [src]="image" alt="">
+  <div class="modal-body" style="overflow: hidden;">
+    <!-- style="overflow: hidden;" -->
+    <div class="text-center" style="position: relative;" [style.height.px]="imageHeight">
+      <div *ngFor="let image of images; index as i">
+        <div [style.visibility]="visibility[i]? 'visible': 'hidden'">
+          <img [@one]='animations[i]' class="slideshow-image" id="slideshow-image" [src]="image" alt="">
+          <div [@two]='animations[i]' class="slideshow-black-box" [style.height.px]="imageHeight / 6"></div>
+          <h2 [@one]='animations[i]' class="slideshow-title" [style.height.px]="(imageHeight / 6) - ((imageHeight / 6) / 3)">
+            <div [innerHTML]="sanitizer.bypassSecurityTrustHtml(titles[i])"></div>
+          </h2>
+        </div>
       </div>
     </div>
   </div>

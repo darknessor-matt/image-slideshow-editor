@@ -11,6 +11,8 @@ import { ImageUploaderComponent } from './components/image-uploader/image-upload
 
 import { ModalModule } from 'ngx-bootstrap/modal';
 
+import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,9 +25,10 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     FormsModule,
     BrowserAnimationsModule,
     FileUploadModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    EditorModule
   ],
-  providers: [],
+  providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
