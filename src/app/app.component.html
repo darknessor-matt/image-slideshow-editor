@@ -1,15 +1,20 @@
 <div class="container-fluid">
   <div class="row pt-2">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
 
       <div *ngFor="let image of imageIndexes; index as i">
         <div class="row">
           <div class="d-flex align-items-center">
-            <div class="col-md-10">
+            <div class="col-md-9">
               <app-image-uploader (outputImage)="addImageToArray($event)" [index]=i></app-image-uploader>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
+              <label for="lifetime">Lifetime</label>
+              <input type="range" class="custom-range" min="1000" max="5000" [(ngModel)]="lifetime[i]" id="lifetime">
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
               <button (click)="removeImage(i)" type="button" class="btn btn-outline-danger">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
                   viewBox="0 0 16 16">
@@ -30,26 +35,25 @@
       <div class="btn-toolbar">
         <button (click)="addImage()" type="button" class="btn btn-primary mx-3">Add image</button>
         <button (click)="slideshow()" type="button" class="btn btn-primary">Slideshow</button>
+        <button (click)="consoleLogButton()" type="button" class="btn btn-primary mx-3">Log</button>
       </div>
     </div>
-    <div class="col-md-2"></div>
+    <div class="col-md-1"></div>
   </div>
 </div>
 
 <ng-template #slideshowModal>
   <div class="modal-header">
-      <h4 class="modal-title pull-left">Modal</h4>
-      <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
-          <span aria-hidden="true" class="visually-hidden">&times;</span>
-      </button>
+    <h4 class="modal-title pull-left">Modal</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
   </div>
-  <div class="modal-body" style="overflow: auto;">
-      <div class="text-center">
-          
+  <div class="modal-body" id="modalBody" [style.height.%]="100" [style.height.px]="1000">
+    <div class="text-center">
+      <div *ngFor="let image of images; index as i" style="position: relative;">
+        <img class="slideshow-image" [style.visibility]="visibility[i]? 'visible': 'hidden'" [src]="image" alt="">
       </div>
+    </div>
   </div>
 </ng-template>
-
-<div *ngFor="let image of images; index as i" style="position: relative;">
-  <img [style.visibility]="visibility[i]? 'visible': 'hidden'" [src]="image" alt="" style="position: absolute; left: 0; top: 0;">
-</div>

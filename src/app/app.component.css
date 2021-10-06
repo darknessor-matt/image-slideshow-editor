@@ -1,0 +1,8 @@
+.slideshow-image {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    left: 50%;
+    top: 0px;
+    transform: translateX(-50%);
+}
