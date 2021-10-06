@@ -10,11 +10,13 @@ export function slideShowAnimation(name: string, opct:number) {
         state('top', style({ opacity: 1, transform: 'translateX(-50%) translateY(-25em)' })),
         state('left', style({ opacity: 1, transform: 'translateX(-100%)' })),
         state('right', style({ opacity: 1, transform: 'translateX(100%)' })),
+        state('fade-in', style({opacity: 0.1})),
         transition('shown => hidden', animate('0ms 500ms')),
         transition('hidden => shown', animate('500ms')),
         transition('bottom => shown', animate('500ms')),
         transition('top => shown', animate('500ms')),
         transition('left => shown', animate('500ms')),
         transition('right => shown', animate('500ms')),
+        transition('fade-in => shown', animate('500ms'))
     ]);
 }
